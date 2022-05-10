@@ -13,10 +13,25 @@ public class GameLogic {
     }
 
 
-    public void print() {
+    public void play() {
+        generateRandomStart();
+        print();
+
+        // TEMPORARY (to test):
+        System.out.println("\nNouvelle case (test):\n");
+        generateRandomNewSquares();
+        print();
+    }
+
+
+    private void print() {
         for (int[] row : grid) {
             for (int square : row) {
-                System.out.print(square);
+                if (square != 0)
+                    System.out.print(square);
+                else 
+                    System.out.print(0);
+
                 System.out.print(" ");
             }
 
@@ -24,24 +39,34 @@ public class GameLogic {
         }
     }
 
-    public void generateRandomStart() {
+
+    private void generateRandomStart() {
         for (int[] row : grid) {
             for (int i = 0; i < LENGHT; ++i) {
-                row[i] = generateRandomSquare();
+                row[i] = generateRandomSquare(50);
             }
         }
 
     }
 
-    private int generateRandomSquare() {
+    private void generateRandomNewSquares() {
+        for (int[] row : grid) {
+            for (int i = 0; i < LENGHT; ++i) {
+                row[i] = (row[i] != 0 ? row[i] : generateRandomSquare(28));
+            }
+        }
+    }
+
+
+    private int generateRandomSquare(int newSquarePercentage) {
         Random random = new Random();
 
         final int randomNumber = random.nextInt(100);
 
-        if (randomNumber < 34)
-            return 4;
-        else if (randomNumber < 67)
+        if (randomNumber < newSquarePercentage * 2 / 3)
             return 2;
+        else if (randomNumber < newSquarePercentage)
+            return 4;
 
         return 0;
     }
