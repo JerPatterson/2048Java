@@ -30,7 +30,7 @@ public class GameLogic {
                 if (square != 0)
                     System.out.print(square);
                 else 
-                    System.out.print(0);
+                    System.out.print("_");
 
                 System.out.print(" ");
             }
@@ -43,7 +43,7 @@ public class GameLogic {
     private void generateRandomStart() {
         for (int[] row : grid) {
             for (int i = 0; i < LENGHT; ++i) {
-                row[i] = generateRandomSquare(50);
+                row[i] = generateRandomSquare(46);
             }
         }
 
@@ -52,7 +52,7 @@ public class GameLogic {
     private void generateRandomNewSquares() {
         for (int[] row : grid) {
             for (int i = 0; i < LENGHT; ++i) {
-                row[i] = (row[i] != 0 ? row[i] : generateRandomSquare(28));
+                row[i] = (row[i] != 0 ? row[i] : generateRandomSquare(26));
             }
         }
     }
