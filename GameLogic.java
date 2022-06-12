@@ -105,8 +105,8 @@ public class GameLogic {
     private boolean isEnd() {
         for (int i = 0; i < LENGHT; ++i) {
             for (int j = 0; j < HEIGHT; ++j) {
-                if (isValidHorizontalMove(i, j) 
-                    || isValidVerticalMove(i, j)) {
+                if (isValidHorizontalMove() 
+                    || isValidVerticalMove()) {
                     return false;
                 }
             }
@@ -135,28 +135,49 @@ public class GameLogic {
     }
 
 
-    private boolean isValidHorizontalMove(int row, int column) {
-        if (grid[row][column] == 0) {
-            return true;
+    private boolean isValidHorizontalMove() {
+        for (int i = 0; i < HEIGHT; ++ i) {
+            for (int j = 0; j < LENGHT - 1; ++j) {
+                if (grid[i][j] == 0) {
+                    return true;
+                }
+                else if (getVeryNextRight(i, j) == grid[i][j]) {
+                    return true;
+                }
+            }
         }
-        else if (getNextValueLeft(row, column) == grid[row][column]
-            || getNextValueRight(row, column) == grid[row][column]) {
-            return true;
-        }
-
         return false;
     }
 
-    private boolean isValidVerticalMove(int row, int column) {
-        if (grid[row][column] == 0) {
-            return true;
+    private boolean isValidVerticalMove() {
+        for (int i = 0; i < LENGHT; ++ i) {
+            for (int j = 0; j < HEIGHT - 1; ++j) {
+                if (grid[j][i] == 0) {
+                    return true;
+                }
+                else if (getVeryNextDown(j, i) == grid[j][i]) {
+                    return true;
+                }
+            }
         }
-        else if (getNextValueUp(row, column) == grid[row][column]
-            || getNextValueDown(row, column) == grid[row][column]) {
-            return true;
-        }
-
         return false;
+    }
+
+
+    private int getVeryNextLeft(final int row, final int column) {
+        return row > 0 ? grid[row][column - 1] : -1;
+    }
+
+    private int getVeryNextRight(final int row, final int column) {
+        return row < LENGHT ? grid[row][column + 1] : -1;
+    }
+
+    private int getVeryNextUp(final int row, final int column) {
+        return row > 0 ? grid[row - 1][column] : -1;
+    }
+
+    private int getVeryNextDown(final int row, final int column) {
+        return row < HEIGHT ? grid[row + 1][column] : -1;
     }
 
 
