@@ -1,5 +1,5 @@
 import java.util.Random;
-import java.util.Scanner;
+
 
 
 public class GameLogic {
@@ -110,16 +110,8 @@ public class GameLogic {
     }
 
 
-    private int getVeryNextLeft(final int row, final int column) {
-        return row > 0 ? grid[row][column - 1] : -1;
-    }
-
     private int getVeryNextRight(final int row, final int column) {
         return row < LENGHT ? grid[row][column + 1] : -1;
-    }
-
-    private int getVeryNextUp(final int row, final int column) {
-        return row > 0 ? grid[row - 1][column] : -1;
     }
 
     private int getVeryNextDown(final int row, final int column) {
