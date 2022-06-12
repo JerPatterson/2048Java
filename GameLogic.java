@@ -5,45 +5,21 @@ import java.util.Scanner;
 public class GameLogic {
     private static final int LENGHT = 4;
     private static final int HEIGHT = 4;
-
-    private static final char RIGHT_MOVE = 'f';
-    private static final char LEFT_MOVE = 's';
-    private static final char UP_MOVE = 'e';
-    private static final char DOWN_MOVE = 'd';
     
-
-    Scanner reader = new Scanner(System.in);
     private int[][] grid = new int[LENGHT][HEIGHT];
 
 
     GameLogic() {
-        generateRandomStart();
+        // Nothing to do
     }
 
 
-    public void play() {
+    public void startANewGame() {
         generateRandomStart();
         print();
-
-        // Minor tests of the methods
-        int testRow = 2;
-        int testColumn = 2;
-        System.out.printf("\nFrom the position (%d, %d)", testRow, testColumn);
-
-        System.out.println("\n\nNext Up: ");
-        System.out.println(getNextValueUp(testRow, testColumn));
-        System.out.println("Next Down: ");
-        System.out.println(getNextValueDown(testRow, testColumn));
-        System.out.println("Next Left: ");
-        System.out.println(getNextValueLeft(testRow, testColumn));
-        System.out.println("Next Right: ");
-        System.out.println(getNextValueRight(testRow, testColumn));
-
-        reader.close();
     }
 
-
-    private void print() {
+    public void print() {
         for (int[] row : grid) {
             for (int square : row) {
                 if (square != 0)
@@ -68,7 +44,7 @@ public class GameLogic {
 
     }
 
-    private void generateRandomNewSquares() {
+    public void generateRandomNewSquares() {
         for (int[] row : grid) {
             for (int i = 0; i < LENGHT; ++i) {
                 row[i] = (row[i] != 0 ? row[i] : generateRandomSquare(26));
@@ -91,18 +67,7 @@ public class GameLogic {
     }
 
 
-    public void waitForMove() {
-        if (!isEnd()) {
-            reader.useDelimiter("");
-            char newMove = reader.nextLine().charAt(0);
-            
-            makeMove(newMove);
-            generateRandomNewSquares();
-        }
-
-    }
-
-    private boolean isEnd() {
+    public boolean isEnd() {
         for (int i = 0; i < LENGHT; ++i) {
             for (int j = 0; j < HEIGHT; ++j) {
                 if (isValidHorizontalMove() 
@@ -113,25 +78,6 @@ public class GameLogic {
         }
         
         return true;
-    }
-
-
-    private void makeMove(char move) {
-        if (move == RIGHT_MOVE) {
-            //TODO
-        }
-
-        else if (move == LEFT_MOVE) {
-            //TODO
-        }
-
-        else if (move == UP_MOVE) {
-            //TODO
-        }
-
-        else if (move == DOWN_MOVE) {
-            //TODO
-        }
     }
 
 
@@ -225,4 +171,142 @@ public class GameLogic {
         return -1;
     }
 
+    
+    public void makeLeftShift() {
+        if (isValidHorizontalMove()) {
+            int currentSquare;
+            boolean nextValueUsed = false;
+
+            for (int i = 0; i < HEIGHT; ++i) {
+                for (int j = 0; j < LENGHT; ++j) {
+                    currentSquare = grid[i][j];
+
+                    if (nextValueUsed) {
+                        if (currentSquare != 0) {
+                            grid[i][j] = 0;
+                            nextValueUsed = false;
+                        }
+                    }
+                    else {
+                        if (currentSquare == getNextValueRight(i, j)) {
+                            grid[i][j] += getNextValueRight(i, j);
+                            grid[i][j + 1] = 0;
+                        }
+                        else if (currentSquare == 0) {
+                            grid[i][j] = getNextValueRight(i, j);
+                            nextValueUsed = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void makeRightShift() {
+        if (isValidHorizontalMove()) {
+            int currentSquare;
+            boolean nextValueUsed = false;
+
+            for (int i = 0; i < HEIGHT; ++i) {
+                for (int j = LENGHT - 1; j >= 0; --j) {
+                    currentSquare = grid[i][j];
+
+                    if (nextValueUsed) {
+                        if (currentSquare != 0) {
+                            grid[i][j] = 0;
+                            nextValueUsed = false;
+                        }
+                    }
+                    else {
+                        if (currentSquare == 0) {
+                            grid[i][j] = getNextValueLeft(i, j);
+                            nextValueUsed = true;
+                        }
+                        if (currentSquare == getNextValueLeft(i, j)) {
+                            grid[i][j] += getNextValueLeft(i, j);
+                            grid[i][j - 1] = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void makeUpShift() {
+        if (isValidVerticalMove()) {
+            int currentSquare;
+            int resetHeight;
+            boolean nextValueUsed;
+
+            for (int i = 0; i < LENGHT; ++i) {
+                resetHeight = 0;
+                nextValueUsed = false;
+                
+                for (int j = 0; j < HEIGHT; ++j) {
+                    currentSquare = grid[j][i];
+
+                    if (nextValueUsed) {
+                        if (currentSquare != 0) {
+                            grid[j][i] = 0;
+                            j = resetHeight;
+                            nextValueUsed = false;
+                        }
+                    }
+                    else {
+                        if (currentSquare == 0) {
+                            if (getNextValueDown(j, i) != -1) {
+                                grid[j][i] = getNextValueDown(j, i);
+                                resetHeight = (j - 1 >= 0 ? j - 1 : 0);
+                                nextValueUsed = true;
+                            }
+                        }
+                        else if (currentSquare == getNextValueDown(j, i)) {
+                            grid[j][i] += getNextValueDown(j, i);
+                            resetHeight = j;
+                            nextValueUsed = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void makeDownShift() {
+        if (isValidVerticalMove()) {
+            int currentSquare;
+            int resetHeight;
+            boolean nextValueUsed;
+
+            for (int i = 0; i < LENGHT; ++i) {
+                resetHeight = HEIGHT - 1;
+                nextValueUsed = false;
+                
+                for (int j = HEIGHT - 1; j >= 0; --j) {
+                    currentSquare = grid[j][i];
+
+                    if (nextValueUsed) {
+                        if (currentSquare != 0) {
+                            grid[j][i] = 0;
+                            j = resetHeight;
+                            nextValueUsed = false;
+                        }
+                    }
+                    else {
+                        if (currentSquare == 0) {
+                            if (getNextValueUp(j, i) != -1) {
+                                grid[j][i] = getNextValueUp(j, i);
+                                resetHeight = (j + 1 < HEIGHT ? j + 1 : HEIGHT - 1);
+                                nextValueUsed = true;
+                            }
+                        }
+                        else if (currentSquare == getNextValueUp(j, i)) {
+                            grid[j][i] += getNextValueUp(j, i);
+                            resetHeight = j;
+                            nextValueUsed = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

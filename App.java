@@ -1,8 +1,8 @@
 public class App {
     public static void main(String args[]) {
-        GameLogic game = new GameLogic();
+        Player player = new Player();
 
         System.out.println("La partie débute:\n");
-        game.play();
+        player.play();
     }
 }
