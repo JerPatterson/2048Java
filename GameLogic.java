@@ -256,7 +256,7 @@ public class GameLogic {
                         if (currentSquare == 0) {
                             if (getNextValueDown(j, i) != -1) {
                                 grid[j][i] = getNextValueDown(j, i);
-                                resetHeight = (j - 1 >= 0 ? j - 1 : 0);
+                                resetHeight = j - 1;
                                 nextValueUsed = true;
                             }
                         }
@@ -295,7 +295,7 @@ public class GameLogic {
                         if (currentSquare == 0) {
                             if (getNextValueUp(j, i) != -1) {
                                 grid[j][i] = getNextValueUp(j, i);
-                                resetHeight = (j + 1 < HEIGHT ? j + 1 : HEIGHT - 1);
+                                resetHeight = j + 1;
                                 nextValueUsed = true;
                             }
                         }
