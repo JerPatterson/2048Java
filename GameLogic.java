@@ -25,11 +25,19 @@ public class GameLogic {
         generateRandomStart();
         print();
 
-        // TEMPORARY (to test):
-        waitForMove();
-        print();
-        waitForMove();
-        print();
+        // Minor tests of the methods
+        int testRow = 2;
+        int testColumn = 2;
+        System.out.printf("\nFrom the position (%d, %d)", testRow, testColumn);
+
+        System.out.println("\n\nNext Up: ");
+        System.out.println(getNextValueUp(testRow, testColumn));
+        System.out.println("Next Down: ");
+        System.out.println(getNextValueDown(testRow, testColumn));
+        System.out.println("Next Left: ");
+        System.out.println(getNextValueLeft(testRow, testColumn));
+        System.out.println("Next Right: ");
+        System.out.println(getNextValueRight(testRow, testColumn));
 
         reader.close();
     }
@@ -110,19 +118,19 @@ public class GameLogic {
 
     private void makeMove(char move) {
         if (move == RIGHT_MOVE) {
-
+            //TODO
         }
 
         else if (move == LEFT_MOVE) {
-
+            //TODO
         }
 
         else if (move == UP_MOVE) {
-
+            //TODO
         }
 
         else if (move == DOWN_MOVE) {
-
+            //TODO
         }
     }
 
@@ -131,7 +139,8 @@ public class GameLogic {
         if (grid[row][column] == 0) {
             return true;
         }
-        else if (getNextInRow(row, column) == grid[row][column]) {
+        else if (getNextValueLeft(row, column) == grid[row][column]
+            || getNextValueRight(row, column) == grid[row][column]) {
             return true;
         }
 
@@ -142,7 +151,8 @@ public class GameLogic {
         if (grid[row][column] == 0) {
             return true;
         }
-        else if (getNextInColumn(row, column) == grid[row][column]) {
+        else if (getNextValueUp(row, column) == grid[row][column]
+            || getNextValueDown(row, column) == grid[row][column]) {
             return true;
         }
 
@@ -150,24 +160,48 @@ public class GameLogic {
     }
 
 
-    private int getNextInRow(int row, int column) {
+    private int getNextValueLeft(final int row, int column) {
+        --column;
+        for (int i = column; i >= 0; --i) {
+            if (grid[row][i] != 0) {
+                return grid[row][i];
+            }
+        }
+
+        return -1;
+    }
+
+    private int getNextValueRight(final int row, int column) {
+        ++column;
         for (int i = column; i < LENGHT; ++i) {
             if (grid[row][i] != 0) {
                 return grid[row][i];
             }
         }
 
-        return 0;
+        return -1;
     }
 
-    private int getNextInColumn(int row, int column) {
+    private int getNextValueUp(int row, final int column) {
+        --row;
+        for (int i = row; i >= 0; --i) {
+            if (grid[i][column] != 0) {
+                return grid[i][column];
+            }
+        }
+
+        return -1;
+    }
+
+    private int getNextValueDown(int row, final int column) {
+        ++row;
         for (int i = row; i < HEIGHT; ++i) {
             if (grid[i][column] != 0) {
                 return grid[i][column];
             }
         }
 
-        return 0;
+        return -1;
     }
 
 }
