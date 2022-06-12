@@ -16,12 +16,13 @@ public class Player {
 
 
     public void waitForMoves() {
-        if (!game.isEnd()) {
+        while (!game.isEnd()) {
             reader.useDelimiter("");
             char newMove = reader.nextLine().charAt(0);
             
             mover.makeMove(newMove, game);
             game.generateRandomNewSquares();
+            game.print();
         }
 
     }

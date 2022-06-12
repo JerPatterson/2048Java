@@ -21,8 +21,6 @@ public class Mover {
         else if (move == DOWN_MOVE) {
             game.makeDownShift();
         }
-
-        game.print();
     }
  
 }
