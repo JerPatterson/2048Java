@@ -175,25 +175,34 @@ public class GameLogic {
     public void makeLeftShift() {
         if (isValidHorizontalMove()) {
             int currentSquare;
-            boolean nextValueUsed = false;
+            int resetLength;
+            boolean nextValueUsed;
 
             for (int i = 0; i < HEIGHT; ++i) {
+                resetLength = 0;
+                nextValueUsed = false;
+
                 for (int j = 0; j < LENGHT; ++j) {
                     currentSquare = grid[i][j];
 
                     if (nextValueUsed) {
                         if (currentSquare != 0) {
                             grid[i][j] = 0;
+                            j = resetLength;
                             nextValueUsed = false;
                         }
                     }
                     else {
-                        if (currentSquare == getNextValueRight(i, j)) {
-                            grid[i][j] += getNextValueRight(i, j);
-                            grid[i][j + 1] = 0;
+                        if (currentSquare == 0) {
+                            if (getNextValueRight(i, j) != -1) {
+                                grid[i][j] = getNextValueRight(i, j);
+                                resetLength = j - 1;
+                                nextValueUsed = true;
+                            }
                         }
-                        else if (currentSquare == 0) {
-                            grid[i][j] = getNextValueRight(i, j);
+                        else if (currentSquare == getNextValueRight(i, j)) {
+                            grid[i][j] += getNextValueRight(i, j);
+                            resetLength = j;
                             nextValueUsed = true;
                         }
                     }
@@ -205,26 +214,35 @@ public class GameLogic {
     public void makeRightShift() {
         if (isValidHorizontalMove()) {
             int currentSquare;
-            boolean nextValueUsed = false;
+            int resetLength;
+            boolean nextValueUsed;
 
             for (int i = 0; i < HEIGHT; ++i) {
+                resetLength = LENGHT - 1;
+                nextValueUsed = false;
+
                 for (int j = LENGHT - 1; j >= 0; --j) {
                     currentSquare = grid[i][j];
 
                     if (nextValueUsed) {
                         if (currentSquare != 0) {
                             grid[i][j] = 0;
+                            j = resetLength;
                             nextValueUsed = false;
                         }
                     }
                     else {
                         if (currentSquare == 0) {
-                            grid[i][j] = getNextValueLeft(i, j);
-                            nextValueUsed = true;
+                            if (getNextValueLeft(i, j) != -1) {
+                                grid[i][j] = getNextValueLeft(i, j);
+                                resetLength = j + 1;
+                                nextValueUsed = true;
+                            }
                         }
-                        if (currentSquare == getNextValueLeft(i, j)) {
+                        else if (currentSquare == getNextValueLeft(i, j)) {
                             grid[i][j] += getNextValueLeft(i, j);
-                            grid[i][j - 1] = 0;
+                            resetLength = j;
+                            nextValueUsed = true;
                         }
                     }
                 }
