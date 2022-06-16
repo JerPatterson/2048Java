@@ -19,6 +19,7 @@ public class Player {
         while (!game.isEnd()) {
             reader.useDelimiter("");
             char newMove = reader.nextLine().charAt(0);
+            System.out.print("\n\n\n\n\n\n\n\n\n\n\n");
             
             mover.makeMove(newMove, game);
             game.generateRandomNewSquares();
